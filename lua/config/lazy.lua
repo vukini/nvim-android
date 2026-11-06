@@ -21,6 +21,13 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+-- Termux: luarocks has no C++ compiler set, so tree-sitter-norg (a C++
+-- scanner) fails to build with "sh: -c: inaccessible or not found".
+-- Needs `pkg install luarocks` too: lazy.nvim's own Lua download fails here.
+if vim.env.PREFIX and vim.env.PREFIX:find("com.termux", 1, true) then
+  vim.env.CXX = vim.env.CXX or "clang++"
+end
+
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
